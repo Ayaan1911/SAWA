@@ -12,10 +12,14 @@ export function formatMessage(decision: ClaudeDecision, gaps: Gap[], drift: Drif
 }
 
 export async function deliverMessage(message: string): Promise<DeliveryResult> {
-  if (config.whatsapp.accessToken && config.whatsapp.phoneNumberId && config.whatsapp.recipient) {
+  if (
+    isConfiguredValue(config.whatsapp.accessToken) &&
+    isConfiguredValue(config.whatsapp.phoneNumberId) &&
+    isConfiguredValue(config.whatsapp.recipient)
+  ) {
     return sendWhatsApp(message);
   }
-  if (config.telegram.botToken && config.telegram.chatId) {
+  if (isConfiguredValue(config.telegram.botToken) && isConfiguredValue(config.telegram.chatId)) {
     return sendTelegram(message);
   }
 
@@ -40,11 +44,14 @@ async function sendWhatsApp(message: string): Promise<DeliveryResult> {
       text: { body: message }
     })
   });
+  const responseText = await response.text();
 
   return {
     provider: 'whatsapp',
     delivered: response.ok,
-    detail: response.ok ? 'WhatsApp Cloud API accepted the message.' : `WhatsApp failed with status ${response.status}.`
+    detail: response.ok
+      ? 'WhatsApp Cloud API accepted the message.'
+      : `WhatsApp failed with status ${response.status}: ${responseText}`
   };
 }
 
@@ -59,10 +66,26 @@ async function sendTelegram(message: string): Promise<DeliveryResult> {
       text: message
     })
   });
+  const responseText = await response.text();
 
   return {
     provider: 'telegram',
     delivered: response.ok,
-    detail: response.ok ? 'Telegram sendMessage accepted the message.' : `Telegram failed with status ${response.status}.`
+    detail: response.ok
+      ? 'Telegram sendMessage accepted the message.'
+      : `Telegram failed with status ${response.status}: ${responseText}`
   };
+}
+
+function isConfiguredValue(value: string): boolean {
+  if (!value.trim()) {
+    return false;
+  }
+
+  const lowered = value.toLowerCase();
+  return !(
+    lowered.includes('your_') ||
+    lowered.includes('changeme') ||
+    lowered.includes('placeholder')
+  );
 }

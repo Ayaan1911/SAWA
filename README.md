@@ -22,7 +22,7 @@ SAWA is a TypeScript autonomous productivity agent centered on a markdown memory
 - `npm run heartbeat:simulate`
 
 ## Manual setup still required
-- Anthropic API key for live Claude calls
+- Groq API key and model for live reasoning calls
 - GitHub token plus watched owner/repo
 - Google service-account JSON with Calendar read access
 - WhatsApp Cloud API credentials or Telegram bot token/chat id

@@ -1,3 +1,4 @@
+import Groq from 'groq-sdk';
 import type { ClaudeDecision, DecomposedAction, DriftScore, Gap, GoalConflict, MeetingInsight, RepoInsight, ResearchDigest, VaultSnapshot } from '../types';
 import { config } from '../config';
 
@@ -13,43 +14,44 @@ interface ReasoningInput {
   recoveryPlan: string[];
 }
 
-export class ClaudeReasoningCore {
+export class GroqReasoningCore {
+  private groq: Groq | null = null;
+
+  private getClient(): Groq | null {
+    if (!config.groq.apiKey) return null;
+    if (!this.groq) {
+      this.groq = new Groq({ apiKey: config.groq.apiKey });
+    }
+    return this.groq;
+  }
+
   async decide(input: ReasoningInput): Promise<ClaudeDecision> {
-    if (!config.anthropic.apiKey) {
+    const client = this.getClient();
+    if (!client) {
       return this.localFallback(input);
     }
 
-    const prompt = buildPrompt(input);
+    const userPrompt = buildPrompt(input);
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'x-api-key': config.anthropic.apiKey,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: config.anthropic.model,
-          max_tokens: 700,
-          system: 'You are SAWA, a self-aware workflow agent. Return concise operational guidance.',
-          messages: [{ role: 'user', content: prompt }]
-        })
+      const response = await client.chat.completions.create({
+        model: config.groq.model,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are SAWA, a self-aware workflow agent. Return concise operational guidance.'
+          },
+          { role: 'user', content: userPrompt }
+        ],
+        max_tokens: 1000
       });
 
-      if (!response.ok) {
-        return this.localFallback(input, `Anthropic API failed with status ${response.status}.`);
-      }
-
-      const payload = (await response.json()) as {
-        content?: Array<{ type: string; text?: string }>;
-      };
-      const text = payload.content?.find((item) => item.type === 'text')?.text?.trim();
+      const text = response.choices[0]?.message?.content?.trim();
       if (!text) {
-        return this.localFallback(input, 'Anthropic response was empty.');
+        return this.localFallback(input, 'Groq response was empty.');
       }
 
       return {
-        provider: 'anthropic',
+        provider: 'groq',
         summary: firstSentence(text),
         message: text,
         nextActions: input.actions.slice(0, 3).map((action) => action.action),
@@ -57,7 +59,7 @@ export class ClaudeReasoningCore {
         recoveryMode: input.recoveryPlan.length > 0
       };
     } catch (error) {
-      return this.localFallback(input, error instanceof Error ? error.message : 'Anthropic call failed.');
+      return this.localFallback(input, error instanceof Error ? error.message : 'Groq call failed.');
     }
   }
 
@@ -73,7 +75,9 @@ export class ClaudeReasoningCore {
       input.drift.explanation,
       input.conflicts.length ? `Conflict detected: ${input.conflicts[0].reason}` : 'No cross-goal conflicts detected.',
       note ? `Note: ${note}` : null
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return {
       provider: 'local-fallback',

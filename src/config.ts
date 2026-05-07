@@ -12,9 +12,9 @@ export const config = {
   heartbeatIntervalHours: Number(process.env.HEARTBEAT_INTERVAL_HOURS ?? 2),
   autoStartHeartbeat: process.env.AUTO_START_HEARTBEAT === 'true',
   memoryVaultPath,
-  anthropic: {
-    apiKey: process.env.ANTHROPIC_API_KEY ?? '',
-    model: process.env.CLAUDE_MODEL ?? 'claude-3-5-sonnet-latest'
+  groq: {
+    apiKey: process.env.GROQ_API_KEY ?? '',
+    model: process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
   },
   github: {
     token: process.env.GITHUB_TOKEN ?? '',

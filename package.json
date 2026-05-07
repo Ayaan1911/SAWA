@@ -9,12 +9,14 @@
     "build": "tsc -b && npm --prefix csawa-agentlanding run build",
     "dev": "node dist/index.js",
     "heartbeat:simulate": "node dist/scripts/simulate-heartbeat.js",
+    "verify:runtime": "node dist/scripts/verify-runtime.js",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
-    "googleapis": "^155.0.0"
+    "googleapis": "^155.0.0",
+    "groq-sdk": "^1.1.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",

@@ -45,7 +45,7 @@ export interface GoalConflict {
 }
 
 export interface ClaudeDecision {
-  provider: 'anthropic' | 'local-fallback';
+  provider: 'groq' | 'local-fallback';
   summary: string;
   message: string;
   nextActions: string[];

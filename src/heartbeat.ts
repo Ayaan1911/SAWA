@@ -8,7 +8,7 @@ import { buildRecoveryPlan } from './engines/recoveryMode';
 import { renderRestartCard } from './engines/restartCard';
 import { renderWeeklyReview } from './engines/weeklyReview';
 import { buildInterventionEntry } from './engines/interventionMemory';
-import { ClaudeReasoningCore } from './integrations/anthropic';
+import { GroqReasoningCore } from './integrations/groq';
 import { deliverMessage, formatMessage } from './integrations/messaging';
 import { getRepoInsight } from './integrations/github';
 import { getMeetingInsight } from './integrations/googleCalendar';
@@ -18,7 +18,7 @@ import type { HeartbeatResult, LogEntry } from './types';
 export class HeartbeatDaemon {
   constructor(
     private readonly vault: MemoryVault,
-    private readonly reasoningCore = new ClaudeReasoningCore()
+    private readonly reasoningCore = new GroqReasoningCore()
   ) {}
 
   async runOnce(): Promise<HeartbeatResult> {
@@ -126,7 +126,7 @@ ${input.gaps.map((gap) => `- ${gap.goalId}: ${gap.reasons.join(' ')}`).join('\n'
 - Velocity: ${input.drift.velocity}
 - Trend: ${input.drift.trend}
 
-## Claude Core
+## Groq Core
 - Provider: ${input.decision.provider}
 - Summary: ${input.decision.summary}
 - Confidence: ${input.decision.confidence}

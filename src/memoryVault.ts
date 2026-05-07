@@ -6,10 +6,27 @@ import type { Goal, LogEntry, VaultSnapshot } from './types';
 
 const defaultGoals = `# Goals
 
-- [ ] G1 | Build SAWA heartbeat loop | tags: core,deep-work | confidence: 0.90
-- [ ] G2 | Ship memory vault tooling | tags: memory,foundation | confidence: 0.95
-- [ ] G3 | Stand up WhatsApp and Telegram delivery | tags: messaging,ops | confidence: 0.74
-- [ ] G4 | Launch dashboard visibility | tags: dashboard,visibility | confidence: 0.71
+---
+id: goal-001
+title: Complete DSA Arrays module
+status: active
+priority: high
+deadline: 2026-05-10
+estimatedHours: 4
+---
+# DSA Arrays
+Work through sliding window and two-pointer problems on LeetCode.
+
+---
+id: goal-002
+title: Fix SAWA repo intelligence tool
+status: active
+priority: high
+deadline: 2026-05-08
+estimatedHours: 3
+---
+# Repo Intelligence
+Ensure the GitHub API integration creates issues correctly.
 `;
 
 const defaultBehavior = `# Behavior
@@ -29,6 +46,13 @@ const defaultInterventions = `# Intervention Memory
 - 2026-05-07: Seeded repository and baseline recovery rules.
 `;
 
+const defaultProjects = `# Projects
+
+## SAWA Agent
+- Stabilize the Groq, Telegram, and GitHub integrations.
+- Keep the heartbeat loop observable through decisions and restart cards.
+`;
+
 const defaultLog = `# Daily Logs
 
 ## 2026-05-07T08:00:00.000Z
@@ -45,24 +69,29 @@ export class MemoryVault {
   readonly goalsPath = path.join(this.root, 'goals.md');
   readonly behaviorPath = path.join(this.root, 'behavior.md');
   readonly fingerprintPath = path.join(this.root, 'fingerprint.md');
-  readonly interventionsPath = path.join(this.root, 'intervention-memory.md');
+  readonly projectsPath = path.join(this.root, 'projects.md');
+  readonly interventionsSummaryPath = path.join(this.root, 'intervention-memory.md');
   readonly logsDir = path.join(this.root, 'logs');
   readonly decisionsDir = path.join(this.root, 'decisions');
-  readonly restartCardsDir = path.join(this.root, 'restart-cards');
+  readonly interventionsDir = path.join(this.root, 'interventions');
+  readonly restartCardsDir = path.join(this.root, 'restart_cards');
   readonly reviewsDir = path.join(this.root, 'reviews');
 
   async initialize(): Promise<void> {
     await ensureDir(this.root);
     await ensureDir(this.logsDir);
     await ensureDir(this.decisionsDir);
+    await ensureDir(this.interventionsDir);
     await ensureDir(this.restartCardsDir);
     await ensureDir(this.reviewsDir);
-    await ensureFile(this.goalsPath, defaultGoals);
+    await this.ensureGoalsFile();
     await ensureFile(this.behaviorPath, defaultBehavior);
     await ensureFile(this.fingerprintPath, defaultFingerprint);
-    await ensureFile(this.interventionsPath, defaultInterventions);
+    await ensureFile(this.projectsPath, defaultProjects);
+    await ensureFile(this.interventionsSummaryPath, defaultInterventions);
     await ensureFile(path.join(this.logsDir, '2026-05-07.md'), defaultLog);
     await ensureFile(path.join(this.decisionsDir, 'README.md'), '# Decisions\n');
+    await ensureFile(path.join(this.interventionsDir, 'README.md'), '# Interventions\n');
     await ensureFile(path.join(this.restartCardsDir, 'README.md'), '# Restart Cards\n');
     await ensureFile(path.join(this.reviewsDir, 'README.md'), '# Weekly Reviews\n');
   }
@@ -73,7 +102,7 @@ export class MemoryVault {
       this.readLogs(),
       readText(this.behaviorPath),
       readText(this.fingerprintPath),
-      readText(this.interventionsPath)
+      this.readInterventions()
     ]);
 
     return { goals, logs, behavior, fingerprint, interventions };
@@ -81,6 +110,11 @@ export class MemoryVault {
 
   async readGoals(): Promise<Goal[]> {
     const content = await readText(this.goalsPath);
+    const frontmatterGoals = parseStructuredGoals(content);
+    if (frontmatterGoals.length > 0) {
+      return frontmatterGoals;
+    }
+
     return content
       .split(/\r?\n/)
       .map((line) => line.trim())
@@ -187,11 +221,40 @@ Tags: ${entry.tags.join(', ') || 'none'}
   }
 
   async appendIntervention(entry: string): Promise<void> {
-    await appendText(this.interventionsPath, `\n- ${entry}`);
+    const day = new Date().toISOString().slice(0, 10);
+    const interventionsFile = path.join(this.interventionsDir, `${day}.md`);
+    const header = (await fileExists(interventionsFile)) ? '' : '# Interventions\n';
+
+    if (header) {
+      await writeText(interventionsFile, `${header}\n- ${entry}\n`);
+    } else {
+      await appendText(interventionsFile, `- ${entry}\n`);
+    }
+
+    await appendText(this.interventionsSummaryPath, `\n- ${entry}`);
   }
 
   async readAllMarkdown(): Promise<string[]> {
     return listMarkdownFiles(this.root);
+  }
+
+  private async ensureGoalsFile(): Promise<void> {
+    if (!(await fileExists(this.goalsPath))) {
+      await ensureFile(this.goalsPath, defaultGoals);
+      return;
+    }
+
+    const content = await readText(this.goalsPath);
+    if (!content.trim() || isPlaceholderGoals(content)) {
+      await writeText(this.goalsPath, defaultGoals);
+    }
+  }
+
+  private async readInterventions(): Promise<string> {
+    const files = (await fs.readdir(this.interventionsDir)).filter((file) => file.endsWith('.md'));
+    const entries = await Promise.all(files.map((file) => readText(path.join(this.interventionsDir, file))));
+    const summary = await readText(this.interventionsSummaryPath);
+    return [summary, ...entries].filter(Boolean).join('\n');
   }
 }
 
@@ -209,4 +272,53 @@ async function fileExists(filePath: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+function isPlaceholderGoals(content: string): boolean {
+  return content.includes('Build SAWA heartbeat loop') || content.includes('- [ ] G1 |');
+}
+
+function parseStructuredGoals(content: string): Goal[] {
+  const matches = [...content.matchAll(/---\s*\r?\n([\s\S]*?)\r?\n---/g)];
+  if (matches.length === 0) {
+    return [];
+  }
+
+  return matches
+    .map((match) => {
+      const metadata = new Map<string, string>();
+      for (const line of match[1].split(/\r?\n/)) {
+        const separator = line.indexOf(':');
+        if (separator === -1) {
+          continue;
+        }
+        metadata.set(line.slice(0, separator).trim(), line.slice(separator + 1).trim());
+      }
+
+      const id = metadata.get('id');
+      const title = metadata.get('title');
+      const status = metadata.get('status') as Goal['status'] | undefined;
+      if (!id || !title || !status) {
+        return null;
+      }
+
+      const priority = metadata.get('priority') ?? 'medium';
+      const confidence =
+        priority === 'high' ? 0.9 :
+        priority === 'low' ? 0.6 :
+        0.75;
+
+      return {
+        id,
+        title,
+        status,
+        tags: title
+          .toLowerCase()
+          .split(/[^a-z0-9]+/)
+          .filter(Boolean)
+          .slice(0, 3),
+        confidence
+      } satisfies Goal;
+    })
+    .filter((goal): goal is Goal => goal !== null);
 }
