@@ -1,0 +1,24 @@
+{
+  "name": "sawa-agent",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "csawa-agentlanding"
+  ],
+  "scripts": {
+    "build": "tsc -b && npm --prefix csawa-agentlanding run build",
+    "dev": "node dist/index.js",
+    "heartbeat:simulate": "node dist/scripts/simulate-heartbeat.js",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "googleapis": "^155.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}

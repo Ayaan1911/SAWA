@@ -1,0 +1,136 @@
+.shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 72px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 56px;
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(240, 180, 41, 0.28), transparent 32%),
+    radial-gradient(circle at right, rgba(39, 180, 190, 0.24), transparent 26%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(11, 18, 32, 0.95));
+  box-shadow: 0 30px 80px rgba(4, 10, 22, 0.42);
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.hero h1 {
+  max-width: 760px;
+  margin: 18px 0 18px;
+}
+
+.lede {
+  max-width: 700px;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.actions a {
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: 700;
+}
+
+.primary {
+  color: #111827;
+  background: linear-gradient(135deg, #f2b84a, #df8a1f);
+}
+
+.secondary {
+  color: var(--text-strong);
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.metrics,
+.stack {
+  display: grid;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metrics article,
+.panel {
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: rgba(9, 15, 28, 0.8);
+  box-shadow: 0 20px 40px rgba(3, 7, 18, 0.2);
+}
+
+.metrics span {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.metrics strong {
+  display: block;
+  color: var(--text-strong);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.stack {
+  grid-template-columns: 1.4fr 1fr 1fr;
+}
+
+.wide {
+  grid-row: span 2;
+}
+
+.panel h2 {
+  margin-bottom: 14px;
+}
+
+.panel ol,
+.panel ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted-soft);
+  line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding: 32px 24px;
+    border-radius: 24px;
+  }
+
+  .metrics,
+  .stack {
+    grid-template-columns: 1fr;
+  }
+
+  .shell {
+    width: min(100% - 24px, 1120px);
+    padding-top: 28px;
+  }
+}

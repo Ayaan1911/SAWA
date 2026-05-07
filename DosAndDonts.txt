@@ -1,0 +1,18 @@
+From the project context file atttached: FOCUS ON:
+
+Architecture diagram (all 4 layers: User → OpenClaw Gateway → SAWA Decision Engine → Memory Vault)
+Memory Vault file structure (goals.md, behavior.md, fingerprint.md, etc.)
+Heartbeat Daemon (triggers, intervals)
+Gap Detection Engine (goals vs logs comparison, drift velocity)
+LLM Reasoning Core (Claude API integration, prompt logic)
+WorkForge Execution Engine (all 9 tools)
+All integrations (WhatsApp, GitHub, Google Calendar, arXiv)
+Environment variables list
+
+IGNORE:
+
+Project timeline / phases
+Presentation talking points ("Why this theme", "Positioning line")
+Slide design descriptions
+"Why it matters" sections
+Any marketing/pitch language

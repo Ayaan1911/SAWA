@@ -1,0 +1,8 @@
+.env
+node_modules/
+dist/
+*.log
+csawa-agentlanding/node_modules/
+csawa-agentlanding/dist/
+landing/
+tsconfig.tsbuildinfo
