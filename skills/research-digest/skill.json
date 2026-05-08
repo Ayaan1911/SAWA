@@ -1,0 +1,23 @@
+{
+  "name": "research-digest",
+  "version": "1.0.0",
+  "description": "Pull a short arXiv digest for current topics relevant to the active goals.",
+  "endpoint": "http://localhost:3000/skills/research-digest",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

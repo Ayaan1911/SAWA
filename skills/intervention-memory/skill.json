@@ -1,0 +1,23 @@
+{
+  "name": "intervention-memory",
+  "version": "1.0.0",
+  "description": "Record which escalations worked or failed so future heartbeats adapt their tone and pressure.",
+  "endpoint": "http://localhost:3000/skills/intervention-memory",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

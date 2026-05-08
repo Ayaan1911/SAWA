@@ -1,0 +1,29 @@
+{
+  "agent": {
+    "name": "SAWA",
+    "version": "1.0.0",
+    "description": "Self-Aware Workflow Agent — detects and closes the gap between goals and reality",
+    "team": "Runtime Terror",
+    "college": "MSRIT Bengaluru"
+  },
+  "gateway": {
+    "baseUrl": "http://localhost:3000",
+    "healthEndpoint": "/health",
+    "skillsEndpoint": "/skills",
+    "authToken": "sawa-runtime-terror-2026"
+  },
+  "workspace": {
+    "soulFile": "SOUL.md",
+    "heartbeatFile": "HEARTBEAT.md",
+    "agentsFile": "AGENTS.md",
+    "memoryPath": "memory-vault/",
+    "skillsPath": "skills/"
+  },
+  "model": {
+    "provider": "groq",
+    "name": "llama-3.3-70b-versatile"
+  },
+  "channels": {
+    "telegram": true
+  }
+}

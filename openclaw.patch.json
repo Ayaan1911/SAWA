@@ -1,0 +1,16 @@
+{
+  "models": {
+    "providers": {
+      "groq": {
+        "apiKey": "__GROQ_API_KEY__"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "groq/llama-3.3-70b-versatile"
+      }
+    }
+  }
+}

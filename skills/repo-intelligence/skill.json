@@ -1,0 +1,23 @@
+{
+  "name": "repo-intelligence",
+  "version": "1.0.0",
+  "description": "Summarize recent repository activity from the GitHub API and feed it into the heartbeat reasoning cycle.",
+  "endpoint": "http://localhost:3000/skills/repo-intelligence",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

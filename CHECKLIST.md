@@ -1,13 +1,13 @@
 # SAWA Checklist
 
-Summary: The SAWA backend, vault, heartbeat loop, dashboard, skills, OpenClaw docs, and React landing page are implemented and building cleanly. Manual setup is still required for external credentials and service onboarding: Anthropic API key, GitHub token and watched repo, Google Calendar service account JSON, WhatsApp Cloud API credentials, and Telegram bot/chat configuration.
+Summary: The SAWA backend, vault, heartbeat loop, dashboard, skills, OpenClaw docs, and React landing page are implemented and building cleanly. Manual setup is still required for external credentials and service onboarding: Groq API key, GitHub token and watched repo, Google Calendar service account JSON, WhatsApp Cloud API credentials, and Telegram bot/chat configuration.
 
 | Item | Status | Notes |
 | --- | --- | --- |
 | Memory Vault (read/write goals, logs, decisions, behavior, fingerprint) | DONE | Root vault structure and read/write APIs implemented. |
 | Gap Detection Engine | DONE | Goal-vs-log comparison implemented. |
 | Drift Velocity Calculator | DONE | Drift scoring and velocity computation implemented. |
-| LLM Reasoning Core (Claude API integration) | DONE | Anthropic integration plus local fallback implemented. |
+| LLM Reasoning Core (Groq API integration) | DONE | Groq (llama-3.3-70b-versatile) integration plus local fallback implemented. |
 | WhatsApp Integration | DONE | WhatsApp Cloud API adapter implemented. |
 | Telegram Fallback | DONE | Telegram bot fallback implemented. |
 | Heartbeat Daemon | DONE | End-to-end loop orchestration implemented. |

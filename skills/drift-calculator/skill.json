@@ -1,0 +1,23 @@
+{
+  "name": "drift-calculator",
+  "version": "1.0.0",
+  "description": "Score execution drift from recent logs, active gaps, energy, and focus trends.",
+  "endpoint": "http://localhost:3000/skills/drift-calculator",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

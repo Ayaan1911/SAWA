@@ -1,0 +1,23 @@
+{
+  "name": "restart-card",
+  "version": "1.0.0",
+  "description": "Create a short recovery artifact when drift becomes critical or repeated blockers accumulate.",
+  "endpoint": "http://localhost:3000/skills/restart-card",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

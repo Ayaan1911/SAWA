@@ -1,0 +1,23 @@
+{
+  "name": "recovery-mode",
+  "version": "1.0.0",
+  "description": "When drift or blockers cross threshold, shrink the plan into an immediate reset sequence.",
+  "endpoint": "http://localhost:3000/skills/recovery-mode",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "accountability-escalator",
+  "version": "1.0.0",
+  "description": "Raise the intensity of reminders only after drift stays high and missed execution evidence repeats.",
+  "endpoint": "http://localhost:3000/skills/accountability-escalator",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

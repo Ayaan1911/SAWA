@@ -7,7 +7,7 @@ User -> OpenClaw-compatible docs and skills -> SAWA decision engine -> Memory Va
 - Memory Vault is the source of truth.
 - Heartbeat daemon drives the loop.
 - Gap detection and drift scoring precede reasoning.
-- Claude integration produces concise interventions.
+- Groq (llama-3.3-70b-versatile) integration produces concise interventions.
 
 ## Tooling
 - GitHub repo intelligence

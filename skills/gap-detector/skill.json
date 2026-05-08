@@ -1,0 +1,23 @@
+{
+  "name": "gap-detector",
+  "version": "1.0.0",
+  "description": "Compare active goals against recent execution logs and surface unserved goals, stalled work, and explicit blockers.",
+  "endpoint": "http://localhost:3000/skills/gap-detector",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}

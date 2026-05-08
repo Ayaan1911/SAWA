@@ -1,0 +1,23 @@
+{
+  "name": "weekly-review",
+  "version": "1.0.0",
+  "description": "Summarize recent logs, decisions, and drift into a weekly operating review.",
+  "endpoint": "http://localhost:3000/skills/weekly-review",
+  "method": "POST",
+  "input": {
+    "type": "object",
+    "properties": {
+      "input": { "type": "string" },
+      "context": { "type": "object" }
+    },
+    "required": ["input"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {
+      "output": { "type": "string" },
+      "actions": { "type": "array" },
+      "timestamp": { "type": "string" }
+    }
+  }
+}
